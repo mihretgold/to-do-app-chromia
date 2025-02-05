@@ -1,3 +1,4 @@
+"use client"
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSessionContext } from "./ContextProvider";
@@ -12,7 +13,7 @@ export default function NewTaskForm() {
     due_date: new Date().toISOString().split("T")[0], // Default to today
   });
 
-  const session = useSessionContext();
+  const {session} = useSessionContext();
 
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

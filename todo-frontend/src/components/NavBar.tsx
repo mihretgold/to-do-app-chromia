@@ -1,15 +1,11 @@
-"use client";
+'use client';
 
-import Link from "next/link";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { CheckSquare } from "lucide-react";
-import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes"; // Use useTheme hook
 
 export default function NavBar() {
-  const pathname = usePathname() || "/";
-  const [hoveredPath, setHoveredPath] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { theme, setTheme } = useTheme(); // Access theme and setTheme from next-themes
 
@@ -33,9 +29,9 @@ export default function NavBar() {
       onMouseMove={handleMouseMove}
     >
       <div className="container mx-auto flex justify-between items-center py-6 px-6">
-        {/* Logo with Mouse Movement */}
+        {/* Logo with Mouse Movement - Home link inside */}
         <motion.div
-          className="flex items-center gap-2 font-bold text-3xl"
+          className="flex items-center gap-2 font-bold text-3xl cursor-pointer"
           animate={{
             x: mousePosition.x * 0.5,
             y: mousePosition.y * 0.5,
@@ -47,52 +43,6 @@ export default function NavBar() {
             To-Do App
           </span>
         </motion.div>
-
-        {/* Navigation Links */}
-        <ul className="flex items-center gap-6 relative">
-          <li className="relative">
-            <Link
-              href="/"
-              className={`text-lg font-medium transition ${
-                pathname === "/"
-                  ? "text-blue-600 dark:text-blue-400"
-                  : "hover:text-gray-600 dark:hover:text-gray-300"
-              }`}
-              onMouseOver={() => setHoveredPath("/")}
-              onMouseLeave={() => setHoveredPath(null)}
-            >
-              Home
-            </Link>
-            {hoveredPath === "/" && (
-              <motion.div
-                layoutId="navbar-hover"
-                className="absolute inset-0 bg-blue-200/30 rounded-md -z-10"
-                transition={{ type: "spring", stiffness: 150, damping: 12 }}
-              />
-            )}
-          </li>
-          <li className="relative">
-            <Link
-              href="/new-task"
-              className={`text-lg font-medium transition ${
-                pathname === "/new-task"
-                  ? "text-blue-600 dark:text-blue-400"
-                  : "hover:text-gray-600 dark:hover:text-gray-300"
-              }`}
-              onMouseOver={() => setHoveredPath("/new-task")}
-              onMouseLeave={() => setHoveredPath(null)}
-            >
-              New Task
-            </Link>
-            {hoveredPath === "/new-task" && (
-              <motion.div
-                layoutId="navbar-hover"
-                className="absolute inset-0 bg-blue-200/30 rounded-md -z-10"
-                transition={{ type: "spring", stiffness: 150, damping: 12 }}
-              />
-            )}
-          </li>
-        </ul>
 
         {/* Theme Toggle Button */}
         <button

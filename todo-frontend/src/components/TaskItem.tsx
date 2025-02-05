@@ -18,7 +18,7 @@ export default function TaskItem({ task }: { task: Task }) {
   const [editedTask, setEditedTask] = useState<Task>(task);
   const [isLoading, setIsLoading] = useState(false);
 
-  const session = useSessionContext();
+  const {session} = useSessionContext();
   
 
   // Handle task update

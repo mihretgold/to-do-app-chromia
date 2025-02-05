@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Pencil, Trash2, CheckCircle, Filter } from "lucide-react";
+import { Pencil, Trash2, CheckCircle, Filter, Plus } from "lucide-react";
 import { useSessionContext } from "./ContextProvider";
 import { useQuery } from "@/app/hooks";
+import { useRouter } from "next/navigation";
 
 export type Task = {
   id: string;
@@ -21,15 +22,15 @@ export type GetTasksReturnType = {
 };
 
 export default function TaskList() {
-  const session = useSessionContext();
+  const { session } = useSessionContext();
   const accountId = session?.account?.id;
   const [filter, setFilter] = useState("all");
   const [showDropdown, setShowDropdown] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTask, setEditedTask] = useState<Task | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
-  // Fetch Tasks
   const { result: allTasks, reload } = useQuery<GetTasksReturnType>(
     "get_my_tasks",
     accountId ? { user_id: accountId, pointer: 0, n_tasks: 10 } : undefined
@@ -45,6 +46,11 @@ export default function TaskList() {
     accountId ? { user_id: accountId } : undefined
   );
 
+  const { result: sortedTasks } = useQuery<GetTasksReturnType>(
+    "get_my_sorted_tasks",
+    accountId ? { user_id: accountId, pointer: 0, n_tasks: 10 } : undefined
+  );
+
   useEffect(() => {
     const interval = setInterval(() => {
       reload();
@@ -58,12 +64,13 @@ export default function TaskList() {
         return completedTasks?.tasks || [];
       case "pending":
         return pendingTasks?.tasks || [];
+      case "sorted":
+        return sortedTasks?.tasks || [];
       default:
         return allTasks?.tasks || [];
     }
   };
 
-  // Reload tasks when filter changes
   useEffect(() => {
     reload();
   }, [filter, reload]);
@@ -121,9 +128,14 @@ export default function TaskList() {
 
   return (
     <div className="p-4 md:p-8">
-      <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-blue-700 text-transparent bg-clip-text">Your Tasks</h2>
+      <div className="flex justify-between mt-4 relative">
+        <button
+          onClick={() => router.push("/new-task")}
+          className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700"
+        >
+          <Plus size={20} className="mr-2" /> Add Task
+        </button>
 
-      <div className="flex justify-end mt-4 relative">
         <button
           onClick={() => setShowDropdown(!showDropdown)}
           className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700"
@@ -132,7 +144,7 @@ export default function TaskList() {
         </button>
         {showDropdown && (
           <div className="absolute right-0 mt-2 bg-white border rounded-lg shadow-lg w-40">
-            {["all", "completed", "pending"].map((value) => (
+            {["all", "completed", "pending", "sorted"].map((value) => (
               <button
                 key={value}
                 onClick={() => {
@@ -179,9 +191,27 @@ export default function TaskList() {
                   </span>
                 </td>
                 <td className="border p-3 flex items-center space-x-4 justify-center">
-                  <button onClick={() => handleComplete(task.id)} className="text-green-500 hover:text-green-700"><CheckCircle size={24} /></button>
-                  <button onClick={() => { setEditedTask(task); setIsEditing(true); }} className="text-blue-500 hover:text-blue-700"><Pencil size={24} /></button>
-                  <button onClick={() => handleDelete(task.id)} className="text-red-500 hover:text-red-700"><Trash2 size={24} /></button>
+                  <button
+                    onClick={() => handleComplete(task.id)}
+                    className="text-green-500 hover:text-green-700"
+                  >
+                    <CheckCircle size={24} />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setEditedTask(task);
+                      setIsEditing(true);
+                    }}
+                    className="text-blue-500 hover:text-blue-700"
+                  >
+                    <Pencil size={24} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(task.id)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    <Trash2 size={24} />
+                  </button>
                 </td>
               </tr>
             ))}

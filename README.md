@@ -33,8 +33,25 @@ A decentralized application (dApp) for managing tasks on the Chromia blockchain,
 - **Developers**: Explore blockchain integration patterns.  
 - **End Users**: Manage tasks in a trustless, decentralized environment.  
 
-## Installation  
-### Prerequisites  
+## Screenshots
+Below are screenshots showcasing different aspects of the application:  
+
+| Screenshot 1 | Screenshot 2 | Screenshot 3 |  
+|-------------|-------------|-------------|  
+| ![Screenshot 1](Images/1.png) | ![Screenshot 2](Images/2.png) | ![Screenshot 3](Images/3.png) |  
+
+| Screenshot 4 | Screenshot 5 | Screenshot 6 |  
+|-------------|-------------|-------------|  
+| ![Screenshot 4](Images/4.png) | ![Screenshot 5](Images/5.png) | ![Screenshot 6](Images/6.png) |  
+
+| Screenshot 7 | Screenshot 8 | Screenshot 9 |  
+|-------------|-------------|-------------|  
+| ![Screenshot 7](Images/7.png) | ![Screenshot 8](Images/8.png) | ![Screenshot 9](Images/9.png) |  
+
+
+Installation
+
+Prerequisites  
 - Node.js v18+  
 - PostgreSQL v16.3+  
 - Docker (for local node setup)  

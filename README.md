@@ -46,7 +46,7 @@ Check for installation on the Chromia official website:
 ### Backend Setup  
 Clone the repository:  
 ```bash  
-git clone https://github.com/NahomKeneni/rell_backend.git  
+git clone [https://github.com/ ](https://github.com/mihretgold/to-do-app-chromia.git)
 cd rell_backend  
 ```  
 Install dependencies:  

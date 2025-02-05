@@ -1,0 +1,45 @@
+import lib.ft4.core.accounts.{ single_sig_auth_descriptor, create_account_with_auth };
+
+
+operation create_task(title: text, description: text, due_date: timestamp,) {
+    val account = auth.authenticate();
+    require(title.size() <= 255, "Task title cannot exceed 255 characters");
+    val user = user @ { account };
+    create task ( user, title, description, due_date, completed = false );
+}
+
+operation update_task(task_id: byte_array, title: text, description: text, due_date: timestamp) {
+    val account = auth.authenticate();
+    require(title.size() <= 255, "Task title cannot exceed 255 characters");
+    val user = user @ { account };
+    val task = require_task(task_id, user);
+    
+    // task.title = title;
+    // task.description = description;
+    // task.due_date = due_date;
+    update task @ {task_id} ( 
+        .title = title,
+        .description = description,
+        .due_date = due_date,
+        .updated_at = op_context.last_block_time
+    );
+}
+
+operation complete_task(task_id: byte_array) {
+    val account = auth.authenticate();
+    val user = user @ { account };
+    val task = require_task(task_id, user);
+    
+    update task @ {task_id} (
+        .completed = true,
+        .updated_at = op_context.last_block_time
+    );
+}
+
+operation delete_task(task_id: byte_array) {
+    val account = auth.authenticate();
+    val user = user @ { account };
+    val task = require_task(task_id, user);
+    
+    delete task @? { .id == task_id };
+}

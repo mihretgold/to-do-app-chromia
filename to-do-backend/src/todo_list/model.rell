@@ -1,0 +1,16 @@
+entity user {
+    mutable name;
+    key id: byte_array;
+    key account;
+}
+
+entity task {
+    key id: byte_array = op_context.transaction.tx_rid;
+    mutable title: text;
+    mutable description: text;
+    mutable due_date: timestamp;
+    mutable completed: boolean = false;
+    created_at: timestamp = op_context.last_block_time;
+    mutable updated_at: timestamp = op_context.last_block_time;
+    index owner: user;
+}

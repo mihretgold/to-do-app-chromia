@@ -1,0 +1,9 @@
+module;
+
+import lib.ft4.core.accounts.{ create_account_with_auth, single_sig_auth_descriptor };
+import todo_list.*;
+
+operation create_user(name, pubkey) {
+    val account = create_account_with_auth(single_sig_auth_descriptor(pubkey, set(["A", "T", "MySession"])));
+    create user ( name, pubkey, account );
+}
